@@ -92,7 +92,7 @@ ping 19761013myvm.westeurope.cloudapp.azure.com
 **Step 2.** Connect to the newly created machine
 
 ```
-ping 19761013myvm.westeurope.cloudapp.azure.com
+ssh lab-user@19761013myvm.westeurope.cloudapp.azure.com
 ```
 
 **Step 3.** Install Azure CLI in the provisioning machine vm00
@@ -102,7 +102,7 @@ sudo yum update -y
 ```
 
 ```
-curl --silent –location https://rpm.nodesource.com/setup\_4.x | sudo bash -
+curl --silent â€“location https://rpm.nodesource.com/setup\_4.x | sudo bash -
 ```
 ```
 sudo yum install -y nodejs
@@ -212,7 +212,7 @@ sudo pip install dnspython
 **Step 3.** We will clone some Github repositories, such as the ansible source code (which includes the dynamic inventory files such as `azure\_rm.py`), and the repository for this lab.
 
 ```
-git clone git://github.com/ansible/ansible.git –recursive
+git clone git://github.com/ansible/ansible.git â€“recursive
 ```
 ```
 git clone git://github.com/erjosito/ansible-azure-lab
@@ -511,6 +511,6 @@ Useful links:
 
 - Ansible web page: [https://www.ansible.com](https://www.ansible.com)
 - Azure portal: [https://portal.azure.com](https://portal.azure.com)
-- Using CLI to créate a Service Principal: [https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli)
-- Ansible documentation – Getting started with Azure: [https://docs.ansible.com/ansible/guide\_azure.html](https://docs.ansible.com/ansible/guide_azure.html)
+- Using CLI to crÃ©ate a Service Principal: [https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli)
+- Ansible documentation â€“ Getting started with Azure: [https://docs.ansible.com/ansible/guide\_azure.html](https://docs.ansible.com/ansible/guide_azure.html)
 - Azure CLI installation on Linux and Mac: [https://azure.microsoft.com/en-us/downloads/cli-tools-install/](https://azure.microsoft.com/en-us/downloads/cli-tools-install/)
