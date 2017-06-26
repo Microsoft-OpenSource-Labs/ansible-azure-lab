@@ -155,7 +155,7 @@ info:    account show command OK
 **Step 3.** Assign the Contributor role to the principal for your subscription, using the object ID for the service principal:
 
 ```
-$ azure role assignment create --objectId  44444444-4444-4444-4444-444444444444 -o** Contributor -c /subscriptions/22222222-2222-2222-2222-222222222222/
+$ azure role assignment create --objectId  44444444-4444-4444-4444-444444444444 -o Contributor -c /subscriptions/22222222-2222-2222-2222-222222222222/
 
 info:    Executing command role assignment create
 + Finding role with specified name
