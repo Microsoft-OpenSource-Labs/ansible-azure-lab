@@ -212,7 +212,7 @@ sudo pip install dnspython
 **Step 3.** We will clone some Github repositories, such as the ansible source code (which includes the dynamic inventory files such as `azure\_rm.py`), and the repository for this lab.
 
 ```
-git clone git://github.com/ansible/ansible.git –recursive
+git clone git://github.com/ansible/ansible.git --recursive
 ```
 ```
 git clone git://github.com/erjosito/ansible-azure-lab
