@@ -293,6 +293,15 @@ Now that we have Ansible up and running, we can deploy our first playbook in ord
 cat ~/.ssh/id\_rsa.pub
 ```
 
+The output of the command needs to be added to the lines:
+
+```
+ssh_public_keys:
+  - path: /home/lab-user/.ssh/authorized_keys
+    key_data: '[PUBLIC KEY STRING HERE]'
+```
+
+
 **Step 2.** You will need to write the IP address of the provisioning machine, that you can find with this command.
 
 ```
