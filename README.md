@@ -45,7 +45,7 @@ Along this lab some variables will be used, that might (and probably should) loo
 | **Description** | **Value used in this lab guide** |
 | --- | --- |
 | Azure resource group | ansiblelab |
-| Name for provisioning VM | 19761013myvm |
+| Name for provisioning VM | <DNSNAME> |
 | Username for provisioning VM | lab-user |
 | Password for provisioning VM | Microsoft123! |
 | Name for created VM | 19761013web01 |
@@ -84,15 +84,15 @@ azure group create ansiblelab westeurope
 ```
 
 ```
-azure vm quick-create -g ansiblelab -n vm-00 -l westeurope -w 19761013myvm -u lab-user -M .ssh/id\_rsa.pub -p Microsoft123! -Q 'OpenLogic:CentOS:7.2:latest' -s 'Visual Studio Enterprise' -y Linux
+azure vm quick-create -g ansiblelab -n <VMNAME> -l westeurope -w <DNSNAME> -u lab-user -M .ssh/id_rsa.pub -p Microsoft123! -Q 'OpenLogic:CentOS:7.2:latest' -s '<SUBSCRIPTIONID>' -y Linux
 ```
 ```
-ping 19761013myvm.westeurope.cloudapp.azure.com
+ping <DNSNAME>.westeurope.cloudapp.azure.com
 ```
 **Step 2.** Connect to the newly created machine
 
 ```
-ssh lab-user@19761013myvm.westeurope.cloudapp.azure.com
+ssh lab-user@<DNSNAME>.westeurope.cloudapp.azure.com
 ```
 
 **Step 3.** Install Azure CLI in the provisioning machine vm00
@@ -102,7 +102,7 @@ sudo yum update -y
 ```
 
 ```
-curl --silent –location https://rpm.nodesource.com/setup\_4.x | sudo bash -
+curl --silent –location https://rpm.nodesource.com/setup_4.x | sudo bash -
 ```
 ```
 sudo yum install -y nodejs
@@ -213,7 +213,7 @@ sudo pip install msrestazure
 sudo pip install dnspython
 ```
 
-**Step 3.** We will clone some Github repositories, such as the ansible source code (which includes the dynamic inventory files such as `azure\_rm.py`), and the repository for this lab.
+**Step 3.** We will clone some Github repositories, such as the ansible source code (which includes the dynamic inventory files such as `azure_rm.py`), and the repository for this lab.
 
 ```
 git clone git://github.com/ansible/ansible.git --recursive
@@ -251,7 +251,7 @@ ssh-keygen -t rsa
 chmod 755 ~/.ssh
 ```
 ```
-chmod 644 ~/.ssh/authorized\_keys
+chmod 644 ~/.ssh/authorized_keys
 ```
 ```
 ssh-copy-id lab-user@127.0.0.1
@@ -263,34 +263,34 @@ Ansible allows to execute operations in machines that can be defined in a static
 **Step 1.** In this first step we will test that the dynamic inventory script is running, executing it with the parameter `--list`. This should show JSON text containing information about all the VMs in your subscription.
 
 ```
-python ./ansible/contrib/inventory/azure\_rm.py --list
+python ./ansible/contrib/inventory/azure_rm.py --list
 ```
 **Step 2.** Now we can test Ansible functionality. But we will not change anything on the target machines, just test reachability with the Ansible function &`ping`.
 ```
-ansible -i ./ansible/contrib/inventory/azure\_rm.py all -m ping
+ansible -i ./ansible/contrib/inventory/azure_rm.py all -m ping
 ```
-**Step 3.** If you already had VMs in your Azure subscription, they probably popped up in the previous steps in this lab. We can refine the inventory script in order to return only the VMs in a certain resource group. To that purpose, we will modify the .ini file that controls some aspects of `azure\_rm.py`. This .ini file is to be located in the same directory as the Python script: `~/ansible/contrib/inventory/azure\_rm.ini`. You need to find the line that specifies which resource groups are to be inspected, uncomment it and change it to something like this:
+**Step 3.** If you already had VMs in your Azure subscription, they probably popped up in the previous steps in this lab. We can refine the inventory script in order to return only the VMs in a certain resource group. To that purpose, we will modify the .ini file that controls some aspects of `azure_rm.py`. This .ini file is to be located in the same directory as the Python script: `~/ansible/contrib/inventory/azure_rm.ini`. You need to find the line that specifies which resource groups are to be inspected, uncomment it and change it to something like this:
 
 ```
-resource\_groups=ansiblelab
+resource_groups=ansiblelab
 ```
 
 **Step 4.** Now you can do again the reachability test with 'ping', and verify that only the provisioning VM (the only VM in our resource group) is tested.
 ```
-ansible -i ./ansible/contrib/inventory/azure\_rm.py all -m ping
+ansible -i ./ansible/contrib/inventory/azure_rm.py all -m ping
 ```
 **Step 5.** You can actually do much more with ansible, such as running any command on all the VMs returned by the dynamic inventory script, in this case `/bin/uname -a`
 ```
-ansible -i ./azure\_rm.py all -m shell -a '/bin/uname -a'
+ansible -i ./azure_rm.py all -m shell -a '/bin/uname -a'
 ```
 # Lab 5: Creating a VM using an Ansible Playbook <a name="lab5"></a>
 
 Now that we have Ansible up and running, we can deploy our first playbook in order to create a VM. This playbook will not be executed using the dynamic inventory function, but on the localhost. This will trigger the necessary calls to Azure so that all required objects are created. We will be using the playbook example that was cloned from the Github repository for this lab in previous sections, which you should have stored in `~/ansible-azure-lab/new_vm_web.yml`.
 
-1. Step 1.You need to change the public SSH key that you will find inside of `~/ansible-azure-lab/new\_vm\_web.yml` with your own key, which you can find using this command:
+1. Step 1.You need to change the public SSH key that you will find inside of `~/ansible-azure-lab/new_vm_web.yml` with your own key, which you can find using this command:
 
 ```
-cat ~/.ssh/id\_rsa.pub
+cat ~/.ssh/id_rsa.pub
 ```
 
 The output of the command needs to be added to the lines:
@@ -335,7 +335,7 @@ info:    network vnet subnet list command OK
 **Step 4.** Now we have all the information we need, and we can run all playbook with all required variables. Note that variables can be defined inside of playbooks, or can be entered at runtime along the ansible-playbook command with the `--extra-vars` option. As VM name please use **only lower case letters and numbers** (no hyphens, underscore signs or upper case letters), and a unique name, for example, prefixing it with your birthday).
 
 ```
-ansible-playbook ~/ansible-azure-lab/new\_vm\_web.yml --extra-vars 'vmname=19761013web01 resgrp=ansiblelab vnet=vm-00-weste-hl2w86f529j7-vnet subnet=vm-00-weste-hl2w86f529j7-snet'
+ansible-playbook ~/ansible-azure-lab/new_vm_web.yml --extra-vars 'vmname=19761013web01 resgrp=ansiblelab vnet=vm-00-weste-hl2w86f529j7-vnet subnet=vm-00-weste-hl2w86f529j7-snet'
 ```
 
 **Step 5.** While the playbook is running, have a look in another console inside of the file `~/ansible-azure-lab/new_vm_web.yml` , and try to identify the different parts it is made out of. When the playbook has been executed successfully, the output should be similar to this one. If it is not, check the appendix for possible error causes:
@@ -375,7 +375,7 @@ localhost                  : ok=6    changed=5    unreachable=0    failed=0
 **Step 6.** Using the dynamic inventory, run the ping test again, to verify that the dynamic inventory file can see the new machine. The first time you run the test you will have to verify the SSH host key, but successive attempts should run without any interaction being required:
 
 ```
-$ ansible -i ~/ansible/contrib/inventory/azure\_rm.py all -m ping
+$ ansible -i ~/ansible/contrib/inventory/azure_rm.py all -m ping
 
 The authenticity of host &#39;52.174.47.97 (52.174.47.97)&#39; can&#39;t be established.
 ECDSA key fingerprint is 48:89:dc:6d:49:77:2d:85:50:6b:73:90:70:c6:05:5c.
@@ -391,7 +391,7 @@ Are you sure you want to continue connecting (yes/no)?  vm-00 | SUCCESS => {
 ```
 
 ```
-  $ ansible -i ~/ansible/contrib/inventory/azure\_rm.py all -m ping
+  $ ansible -i ~/ansible/contrib/inventory/azure_rm.py all -m ping
 
 vm-00 | SUCCESS => {
     'changed': false,
@@ -413,7 +413,7 @@ You will probably be thinking that if the purpose of the exercise is creating a 
 **Step 1.** We will be using the example playbook that was downloaded from Github `~/ansible-azure-lab/httpd.yml`. Additionally, we will be using the variable `vmname` in order to modify the `hosts` parameter of the playbook, that defines on which host (out of the ones returned by the dynamic inventory script) the playbook will be run.
 
 ```
-$ ansible-playbook -i ~/ansible/contrib/inventory/azure\_rm.py ~/ansible-azure-lab/httpd.yml --extra-vars  'vmname=19761013web01'
+$ ansible-playbook -i ~/ansible/contrib/inventory/azure_rm.py ~/ansible-azure-lab/httpd.yml --extra-vars  'vmname=19761013web01'
 
 PLAY [Install Apache Web Server] ***********************************************
 
@@ -437,12 +437,12 @@ PLAY RECAP *********************************************************************
 
 # Lab 7: Deleting a VM using Ansible - Optional <a name="lab7"></a>
 
-Finally, similarly to the process to create a VM we can use Ansible to delete it, making sure that associated objects such storage account, NICs and Network Security Groups are deleted as well. For that we will use the playbook in this lab&#39;s repository delete\_vm.yml:
+Finally, similarly to the process to create a VM we can use Ansible to delete it, making sure that associated objects such storage account, NICs and Network Security Groups are deleted as well. For that we will use the playbook in this lab&#39;s repository delete_vm.yml:
 
 **Step 1.** Now you can test that there is a Web page on our VM using your Internet browser and trying to access the location `http://19761013web01.westeurope.cloudapp.azure.com`.
 
 ```
-$ ansible-playbook ~/ansible-azure-lab/delete\_vm.yml --extra- vars 'vmname=19761013myweb resgrp=ansiblelab'
+$ ansible-playbook ~/ansible-azure-lab/delete_vm.yml --extra- vars 'vmname=19761013myweb resgrp=ansiblelab'
 
 [WARNING]: provided hosts list is empty, only localhost is available
 
@@ -459,7 +459,7 @@ localhost                  : ok=2    changed=0    unreachable=0    failed=0
 ```
 **Step 2.** Verify that the VM does not exist any more using Ansible&#39;s dynamic inventory functionality:
 
-ansible -i ~/ansible/contrib/inventory/azure\_rm.py all -m ping
+ansible -i ~/ansible/contrib/inventory/azure_rm.py all -m ping
 
 # Conclusion <a name="conclusion"></a>
 
@@ -525,5 +525,5 @@ Useful links:
 - Ansible web page: [https://www.ansible.com](https://www.ansible.com)
 - Azure portal: [https://portal.azure.com](https://portal.azure.com)
 - Using CLI to créate a Service Principal: [https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli)
-- Ansible documentation – Getting started with Azure: [https://docs.ansible.com/ansible/guide\_azure.html](https://docs.ansible.com/ansible/guide_azure.html)
+- Ansible documentation – Getting started with Azure: [https://docs.ansible.com/ansible/guide_azure.html](https://docs.ansible.com/ansible/guide_azure.html)
 - Azure CLI installation on Linux and Mac: [https://azure.microsoft.com/en-us/downloads/cli-tools-install/](https://azure.microsoft.com/en-us/downloads/cli-tools-install/)
